@@ -1866,7 +1866,12 @@ Partial updates:
 		sessionsAffected, improperFilenames, unmatched = exp.update_video_data(reprocess=False, resetPaths=False, display=False)
 		assert len(unmatched) == 0
 		exp.update_videos_found()
-		exp.concatenate_session_videos('all', display=True, replace=False,
+		if settings['onlyMakeConcatIfConsent']:
+			filter['consent'] = ['yes']
+		exp.concatenate_session_videos('missing',
+			filter=filter,
+			display=False,
+			replace=False,
 			skipFunction=settings['concatSkipFunction'],
 			processingFunction=settings['concatProcessFunction'])
 
