@@ -120,6 +120,11 @@ studyNicknames = {'physics': 'cfddb63f-12e9-4e62-abd1-47534d6c4dd2',
 				  'politeness': 'b40b6731-2fec-4df4-a12f-d38c7be3015e',
 				  'flurps': '1e9157cd-b898-4098-9429-a599720d0c0a'}
 
+# Which studies do we want to fetch video from when doing an update? Can manually set a list
+# of IDs (e.g. to just do physics, ['cfddb63f-12e9-4e62-abd1-47534d6c4dd2']), or use
+# 'all' to get video from all studies you have access to.
+whichStudiesVideo = studyNicknames.values()
+
 # Don't show/count these user IDs when making coding spreadsheets
 ignoreProfiles = []
 
