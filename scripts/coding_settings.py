@@ -174,6 +174,8 @@ settings = {
 		'eventsToAnnotate': [] # list of event types that should be annotated in bottom left of videos (any events ending in any of these will be annotated)
 	}
 
+showUsername = True # Whether to show usernames (email addresses) in account CSV files, if you have permissions to see these directly
+
 # For each study using coding.py, add a dictionary entry with studyId/studyNickname:settings here. settings (defined above) are the default values; anything here overrides those.
 settingsByStudy = {
 		'physics': {

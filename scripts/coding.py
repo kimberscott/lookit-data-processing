@@ -1843,14 +1843,12 @@ Partial updates:
 		update_account_data()
 		whichStudy = args.study if args.study else 'all'
 		print 'Exporting for ' + whichStudy
-		Experiment.export_accounts(expId=whichStudy)
+		Experiment.export_accounts(expId=whichStudy, showUsername=coding_settings.showUsername)
 
 	elif args.action == 'exportaccounts':
 		whichStudy = args.study if args.study else 'all'
-		showUsernameFor = ['physics', 'politeness', 'flurps']
-		showUsername = args.study in [coding_settings.studyNicknames.get(s, s) for s in showUsernameFor]
 		print 'Exporting for ' + whichStudy
-		Experiment.export_accounts(expId=whichStudy, showUsername=showUsername)
+		Experiment.export_accounts(expId=whichStudy, showUsername=coding_settings.showUsername)
 
 	elif args.action == 'getvideos':
 		print 'Syncing videos with server...'
