@@ -153,10 +153,12 @@ standardFields = [	     'exit-survey.withdrawal',
 						 'mood-survey.energetic']
 
 # Default list of field ENDINGS to exclude. For each session, any field ENDING
-# in a string in this list will excluded from consent/codesheets.
+# in a string in this list will excluded from consent/codesheets. May want to put fields
+# that are redundant or that have super long strings here.
 standardExclude = [		 'allEventTimings',
 						 '.links.related',
-						 'type']
+						 'type',
+						 'consentFormText']
 
 # Default study settings; overridden by any values in settingsByStudy.
 settings = {
@@ -183,7 +185,7 @@ settingsByStudy = {
 			'nVideosExp': 24,
 			'videoFrameNames': ['pref-phys-videos'],
 			'trimLength': -20,
-			'excludeFields': standardExclude,
+			'excludeFields': standardExclude + ['eventTimings'],
 			'studyFields': ['videosShown', 'showedAlternate', 'endedEarly'],
 			'includeFields': standardFields,
 			'extraCodingFields': {

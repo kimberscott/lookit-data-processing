@@ -56,15 +56,16 @@ def generate_email(allFeedback, allSessions, child, message, nCompleted, justFee
 			body += str(feedback['progress']) + ' of 24 videos): '
 		body += '"' + feedback['feedback'] + '"<br><br>'
 
-	body += 'Our records indicate that you have already completed ' + str(nCompleted) + ' of the 12 sessions'
-	if (idealSessions+1)/2 < nCompleted < (idealSessions - 4):
-		body += ' (more than halfway done)!'
-	elif (idealSessions - 4) <= nCompleted < idealSessions:
-		body += ' (so close)!'
-	elif nCompleted >= idealSessions:
-		body += ' (all done)!'
-	else:
-		body += '!'
+    if nCompleted > 0:
+        body += 'Our records indicate that you have already completed ' + str(nCompleted) + ' of the 12 sessions'
+        if (idealSessions+1)/2 < nCompleted < (idealSessions - 4):
+            body += ' (more than halfway done)!'
+        elif (idealSessions - 4) <= nCompleted < idealSessions:
+            body += ' (so close)!'
+        elif nCompleted >= idealSessions:
+            body += ' (all done)!'
+        else:
+            body += '!'
 
 	if nCompleted >= idealSessions:
 		body += ' Thank you so much for all the time you have put in. We will send a personalized report about ' + childName + "'s looking patterns once video coding is ready!<br><br>--The Lookit team<br><br><hr>"
