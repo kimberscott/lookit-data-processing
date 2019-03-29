@@ -6,24 +6,17 @@ import datetime
 import numpy as np
 import donotsend
 
-if __name__ == '__main__':
 
-	# Parse command-line arguments
-	parser = argparse.ArgumentParser(description='Send one-time announcement email for Lookit study')
-	parser.add_argument('--emails', help='Only send emails to these addresses (enter "all" to send to all eligible)',	 action='append', default=['kimber.m.scott@gmail.com'])
 
-	args = parser.parse_args()
 
+def send_announcement_emails(emails, ageRangeDays, logfilename, expId, studyName, studyMessage, maxToSend):
 	accounts = Experiment.load_account_data()
 
 	# Date/time to use for determining ages
 	td = datetime.datetime.today()
-	ageRangeDays = (730, 1461)
 
 	# Get SendGrid object & unsubscribe group for notifications
 	sg = SendGrid()
-
-	logfilename = '/Users/kms/lookit-v2/scripts/logs/sentpolitenessannouncement.txt'
 
 	with open(logfilename) as f:
 		alreadySent = f.readlines()
@@ -35,10 +28,10 @@ if __name__ == '__main__':
 	nRecruit = 0
 	nSent = 0
 
-	politeness = Experiment('b40b6731-2fec-4df4-a12f-d38c7be3015e')
-	politenessSubjects = list(set([paths.get_context_from_session(sess)['child'] for sess in politeness.sessions]))
+	exp = Experiment(expId)
+	existingSubjects = list(set([paths.get_context_from_session(sess)['child'] for sess in exp.sessions]))
 
-	print "Existing subjects: {}".format(", ".join(politenessSubjects))
+	print "Existing subjects: {}".format(", ".join(existingSubjects))
 
 	# Go through accounts looking for people with birthdays in age range
 	for (uname, acc) in accounts.items():
@@ -58,7 +51,7 @@ if __name__ == '__main__':
 		recruitChildren = [child for child in childProfiles if ageRangeDays[0] <= child['ageDays'] <= ageRangeDays[1]]
 
 		# Make sure they have not already participated
-		recruitChildren = [child for child in recruitChildren if child['id'] not in politenessSubjects]
+		recruitChildren = [child for child in recruitChildren if child['id'] not in existingSubjects]
 
 		# Make sure child profile not deleted
 		recruitChildren = [child for child in recruitChildren if not child['deleted']]
@@ -68,7 +61,7 @@ if __name__ == '__main__':
 		if len(recruitChildren):
 
 			if uname in donotsend.users:
-				print("Skipping email for user on donotsend list: {}".format(user))
+				print("Skipping email for user on donotsend list: {}".format(uname))
 				continue
 
 			# Generate the email message to send
@@ -77,19 +70,15 @@ if __name__ == '__main__':
 			subject = 'New study for ' + ' and '.join(childNames) + ' on Lookit!'
 
 			body = 'Hi ' + (name if name else uname) + ',<br><br>'
-			body += "We're writing to invite " + ' and '.join(childNames) + " to participate in the new study 'Mind and Manners' on Lookit! This study for 2- through 4-year-olds looks at how kids learn what it means to be polite. <br><br> In this 15-minute study, your child will listen to short stories where people make requests, and answer questions about the characters by pointing. <br><br> To learn more or get started, visit <a href='https://lookit.mit.edu/studies/b40b6731-2fec-4df4-a12f-d38c7be3015e/' target=_blank>the study</a> on Lookit!<br><br> You'll earn a $4 Amazon gift card for participating (one gift card per child)! <br><br>Happy experimenting! <br><br>The Lookit team<br><br> P.S. Do you have any friends with kids around the same age? We'd be grateful for any help spreading the word about this study!<br><br><hr>"
+			body += "We're writing to invite " + ' and '.join(childNames) + " to participate in the new study '" + studyName + "' on Lookit! " + studyMessage
 
-			if recipient in args.emails or 'all' in args.emails:
-				#print recipient
-
-				print 'Already sent to recipient: {}'.format(
+			if recipient in emails or 'all' == emails:
+				print 'Already sent to recipient {}: {}'.format(recipient,
 		recipient in alreadySent)
 
 				if recipient not in alreadySent and acc['attributes']['email_new_studies']:
-					print recipient
+					print '\tsend email'
 					nSent += 1
-
-					print 'send email\n\n\n'
 					status = sg.send_email_to(
 						recipient,
 						subject,
@@ -99,9 +88,21 @@ if __name__ == '__main__':
 						# Write email address to file
 						logfile.write(recipient + '\n')
 
-					if nSent > 50:
+					if nSent >= maxToSend:
 						break
 
 	print "n in age range, not yet participated: ", nRecruit
 	print "n emails actually sent (not already sent, not unsubscribed):", nSent
 	logfile.close()
+
+# if __name__ == '__main__':
+#
+#	# Parse command-line arguments
+#	parser = argparse.ArgumentParser(description='Send one-time announcement email for Lookit study')
+#	parser.add_argument('--emails', help='Only send emails to these addresses (enter "all" to send to all eligible)',	 action='append', default=['kimber.m.scott@gmail.com'])
+#	args = parser.parse_args()
+#
+#	send_announcement_emails(args.emails, ageRangeDays, logfilename, expId, studyName, studyMessage, maxToSend)
+
+
+
