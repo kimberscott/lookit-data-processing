@@ -18,6 +18,8 @@ import sys
 import random
 import requests
 import conf
+import time
+
 
 ########
 # Basic client logic
@@ -166,7 +168,7 @@ def update_session_data(experimentId, display=False):
 	'''Get session data from the server for this experiment ID and save'''
 	client = ExperimenterClient()
 	exp = client.fetch_collection_records(
-		'studies/{}/responses/'.format(experimentId)
+		'studies/{}/responses'.format(experimentId)
 	)
 	backup_and_save(paths.session_filename(experimentId), exp)
 	if display:
@@ -185,7 +187,10 @@ def update_child_data():
 def update_account_data(): # TODO: doc
 	client = ExperimenterClient()
 
+	start = time.time()
 	accountData = client.fetch_collection_records('users')
+	end = time.time()
+	print('Fetched account data; took {} seconds'.format(end - start))
 	allAccounts = {acc[u'id']: acc for acc in accountData}
 
 	for (id, acc) in allAccounts.iteritems():
