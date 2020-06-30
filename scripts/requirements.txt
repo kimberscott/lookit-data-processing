@@ -1,5 +1,5 @@
 python-dotenv==0.4.0
-requests==2.13.0
+requests==2.20.0
 sendgrid==2.2.1
 awscli==1.10.34
 botocore==1.4.24
