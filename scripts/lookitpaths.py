@@ -3,8 +3,6 @@ from utils import make_sure_path_exists, printer
 import conf
 import coding_settings
 
-#OSF_ACCESS_TOKEN = os.environ.get('OSF_ACCESS_TOKEN')
-#SENDGRID_KEY = os.environ.get('SENDGRID_KEY')
 BASE_DIR=os.environ.get("BASE_DIR")
 VIDEO_DIR = os.path.join(BASE_DIR, os.environ.get("VIDEO_DIR"))
 DATA_DIR = os.path.join(BASE_DIR, os.environ.get("DATA_DIR"))

@@ -12,7 +12,6 @@ load_dotenv(dotenv_path)
 
 VERSION=(args.config or default_env).split('-')[-1]
 
-OSF_ACCESS_TOKEN = os.environ.get('OSF_ACCESS_TOKEN')
 SENDGRID_KEY = os.environ.get('SENDGRID_KEY')
 LOOKIT_ACCESS_TOKEN = os.environ.get('LOOKIT_ACCESS_TOKEN')
 LOOKIT_HOST = os.environ.get('LOOKIT_URL')
