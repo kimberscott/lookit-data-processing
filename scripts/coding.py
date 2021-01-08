@@ -35,7 +35,7 @@ import math
 # Force warnings.warn() to omit the source code line in the message
 formatwarning_orig = warnings.formatwarning
 warnings.formatwarning = lambda message, category, filename, lineno, line=None: \
-    formatwarning_orig(message, category, filename, lineno, line='')
+	formatwarning_orig(message, category, filename, lineno, line='')
 
 class Experiment(object):
 	'''Represent a Lookit experiment with stored session, coding, & video data.'''
@@ -454,9 +454,9 @@ class Experiment(object):
 		childHeaders = allheaders - headers
 		# Generally hide username in exported account sheet, even if we have access to it
 		if showUsername:
-		    headers = list(headers - set(initialHeaders))
+			headers = list(headers - set(initialHeaders))
 		else:
-		    headers = list(headers - set(initialHeaders) - set(['username']))
+			headers = list(headers - set(initialHeaders) - set(['username']))
 		headers.sort()
 		childHeaders = list(childHeaders)
 		childHeaders.sort()
@@ -495,6 +495,7 @@ class Experiment(object):
 
 			parent = [account for (userid, account) in cls.accounts.items() if childid in account['attributes'].get('children', {}).keys() ]
 			demo = parent[0]['attributes']['demographics'] if parent else {}
+			thisAcc.update({'parent_uuid': parent[0]['id'] if parent else ''})
 			thisAcc.update(demo)
 
 			for k in thisAcc.keys():
@@ -534,7 +535,7 @@ class Experiment(object):
 		print('Race')
 		display_unique_counts([' / '.join(child.get('race_identification', [])) for child in children])
 		for race_str in ['black', 'white', 'asian', 'other', 'hawaiian-pac-isl', 'mideast-naf', 'hisp', 'native']:
-		    print('{}: {}'.format(race_str, len([child for child in children if race_str in child.get('race_identification', [])])))
+			print('{}: {}'.format(race_str, len([child for child in children if race_str in child.get('race_identification', [])])))
 
 		print('Gestational age at birth')
 		display_unique_counts([child.get('age_at_birth', '') for child in children])
@@ -767,8 +768,8 @@ class Experiment(object):
 			# Which videos match the expected patterns? Keep track & save the list.
 			self.coding[sessKey]['videosFound'] = []
 			for (iShort, short) in enumerate(shortNames):
-			    # Relax to v['shortname'] in short rather than v['shortname'] == short because
-			    # we now store the timestamp + random segment in the shortname
+				# Relax to v['shortname'] in short rather than v['shortname'] == short because
+				# we now store the timestamp + random segment in the shortname
 				theseVideos = [k for (k,v) in self.videoData.items() if (v['shortname'] in short) ]
 				if len(theseVideos) == 0:
 					warnings.warn('update_videos_found: Expected video not found for {} on {}'.format(short, self.find_session(self.sessions, sessKey)['attributes']['created_on']))
@@ -1308,6 +1309,8 @@ class Experiment(object):
 		for (key,val) in self.coding.items():
 			# Get session information for this coding session
 			sess = self.find_session(self.sessions, key)
+			if sess == -1:
+			    continue
 
 			# Combine coding & session data
 			origSess = sess
@@ -1947,7 +1950,7 @@ Partial updates:
 		Experiment.export_children()
 
 	elif args.action == 'childages':
-	    Experiment.export_children()
+		Experiment.export_children()
 
 	elif args.action == 'tests':
 		pass

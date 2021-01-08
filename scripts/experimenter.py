@@ -79,6 +79,89 @@ class ExperimenterClient(object):
 			hasMore = respLink is not None
 		return data
 
+	def add_response(self, study_id, child_id, data):
+		'''data is e.g.
+			"conditions": {
+				"3-video-stim": {
+					"conditionNum": 1,
+					"parameterSet": {
+						"RESTPIC": "http://d1xha8gpb1dx7d.cloudfront.net/img/rest.png",
+						"REST-AUD": "http://d1xha8gpb1dx7d.cloudfront.net/mp3/rest-normalized-loop5.mp3",
+						"STIM-AUD": "http://d1xha8gpb1dx7d.cloudfront.net/mp3/mo-normalized.mp3",
+						"STIM-PIC": "http://d1xha8gpb1dx7d.cloudfront.net/img/go.png",
+						"STIM-VID": "https://bayetlab-neonatal.s3.us-east-2.amazonaws.com/mp4/MouthOpening.mp4",
+						"INSTRUCTION": "Open your mouth",
+						"REST-AUD-OGG": "http://d1xha8gpb1dx7d.cloudfront.net/ogg/rest-normalized-loop5.ogg",
+						"STIM-AUD-OGG": "http://d1xha8gpb1dx7d.cloudfront.net/ogg/mo-normalized.ogg",
+						"STIM-AUD-REPEAT": "http://d1xha8gpb1dx7d.cloudfront.net/mp3/mo-normalized-loop5.mp3",
+						"STIM-AUD-REPEAT-OGG": "http://d1xha8gpb1dx7d.cloudfront.net/ogg/mo-normalized-loop5.ogg"
+					}
+				}
+			},
+			"global_event_timings": [
+				{
+					"exit_type": "browserNavigationAttempt",
+					"timestamp": "2017-09-05T14:33:41.322Z",
+					"event_type": "exitEarly",
+					"last_page_seen": 0
+				}
+			],
+			"exp_data": {},
+			"sequence": [
+				"0-video-config",
+				"1-consent-form",
+				"2-video-quality",
+				"3-video-stim",
+				"4-video-stim",
+				"5-video-stim",
+				"6-video-stim",
+				"7-video-stim",
+				"8-video-stim",
+				"9-video-stim",
+				"10-video-stim",
+				"11-video-stim",
+				"12-video-stim",
+				"13-video-stim",
+				"14-video-stim",
+				"15-are-mother-survey",
+				"16-PSS-survey",
+				"17-RLEQ-survey",
+				"18-father-present-survey",
+				"20-exit-survey"
+			],
+			"completed": true,
+			"completed_consent_frame": true,
+			"created_on": "2020-01-08T20:37:58.344491-05:00",
+			"pk": 1036,
+			"withdrawn": null
+		'''
+		url = self._url_for_collection('responses')
+		post_data = {
+			"data": {
+				"attributes": data,
+				"relationships": {
+				  "child": {
+					"data": {
+					  "type": "children",
+					  "id": child_id
+					}
+				  },
+				  "study": {
+					"data": {
+					  "type": "studies",
+					  "id": study_id
+					}
+				  }
+				},
+			"type": "responses"
+			}
+		}
+		return self.session.post(
+			url,
+			headers = {'Content-type': "application/vnd.api+json"},
+			json = post_data
+		).json()
+
 	def add_session_feedback(self, session, feedback):
 		"""Add session feedback.
 		session: dict, {'id': SESSIONID}

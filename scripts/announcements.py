@@ -28,8 +28,11 @@ def send_announcement_emails(emails, ageRangeDays, logfilename, expId, studyName
 	nRecruit = 0
 	nSent = 0
 
-	exp = Experiment(expId)
-	existingSubjects = list(set([paths.get_context_from_session(sess)['child'] for sess in exp.sessions]))
+	if expId:
+		exp = Experiment(expId)
+		existingSubjects = list(set([paths.get_context_from_session(sess)['child'] for sess in exp.sessions]))
+	else:
+		existingSubjects = []
 
 	print "Existing subjects: {}".format(", ".join(existingSubjects))
 
@@ -38,6 +41,12 @@ def send_announcement_emails(emails, ageRangeDays, logfilename, expId, studyName
 
 		name = acc['attributes']['nickname']
 		recipient = acc['attributes']['username'].strip().encode('utf-8')
+
+		# Make sure they didn't just register
+		dateJoined = acc['attributes']['date_created']
+		daysSinceJoined = float((td - datetime.datetime.strptime(dateJoined[0:10], '%Y-%m-%d')).total_seconds())/84600
+		if daysSinceJoined < 3:
+			continue
 
 		childProfiles = []
 		for (id, prof) in acc['attributes']['children'].items():
@@ -94,15 +103,5 @@ def send_announcement_emails(emails, ageRangeDays, logfilename, expId, studyName
 	print "n in age range, not yet participated: ", nRecruit
 	print "n emails actually sent (not already sent, not unsubscribed):", nSent
 	logfile.close()
-
-# if __name__ == '__main__':
-#
-#	# Parse command-line arguments
-#	parser = argparse.ArgumentParser(description='Send one-time announcement email for Lookit study')
-#	parser.add_argument('--emails', help='Only send emails to these addresses (enter "all" to send to all eligible)',	 action='append', default=['kimber.m.scott@gmail.com'])
-#	args = parser.parse_args()
-#
-#	send_announcement_emails(args.emails, ageRangeDays, logfilename, expId, studyName, studyMessage, maxToSend)
-
 
 

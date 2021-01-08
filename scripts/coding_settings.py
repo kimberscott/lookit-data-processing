@@ -118,12 +118,14 @@ CODERS = ['Kim', 'Coder1']
 studyNicknames = {'physics': 'cfddb63f-12e9-4e62-abd1-47534d6c4dd2',
 				  'geometry': 'c7001e3a-cfc5-4054-a8e0-0f5e520950ab',
 				  'politeness': 'b40b6731-2fec-4df4-a12f-d38c7be3015e',
-				  'flurps': '1e9157cd-b898-4098-9429-a599720d0c0a'}
+				  'flurps': '1e9157cd-b898-4098-9429-a599720d0c0a',
+				  'geometry2': '849b547f-5199-4aa0-892d-a96262080dc8',
+				  'laughter': 'd4cbfabc-ea53-4877-bc55-c701426fd13b'}
 
 # Which studies do we want to fetch video from when doing an update? Can manually set a list
 # of IDs (e.g. to just do physics, ['cfddb63f-12e9-4e62-abd1-47534d6c4dd2']), or use
 # 'all' to get video from all studies you have access to.
-whichStudiesVideo = studyNicknames.values()
+whichStudiesVideo = [] #studyNicknames.values()
 
 # Don't show/count these user IDs when making coding spreadsheets
 ignoreProfiles = []
