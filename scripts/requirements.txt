@@ -19,7 +19,7 @@ python-http-client==1.2.3
 pytz==2016.6.1
 rsa==3.4.2
 s3transfer==0.0.1
-setuptools==21.0.0
+setuptools==65.5.1
 six==1.10.0
 smtpapi==0.3.1
 wheel==0.29.0
